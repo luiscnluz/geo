@@ -89,3 +89,5 @@ with st.expander("Ver detalhes da resistência"):
 st.markdown("---")
 st.dataframe(df)
 
+st.markdown("---")
+st.caption("Microestacas | Designed for civil engineering applications by Luís Luz")
