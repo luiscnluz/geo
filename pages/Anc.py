@@ -86,4 +86,4 @@ st.dataframe(df)
 
 
 st.markdown("---")
-st.caption("Cálculo Dinâmico de Ancoragens | Designed for civil engineering applications by Luís Luz")
+st.caption("Cálculo Dinâmico de Ancoragens | 2025")
