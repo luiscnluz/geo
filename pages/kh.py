@@ -61,4 +61,4 @@ if show_results:
             )
 
 st.markdown("---")
-st.caption("Kh Vesic | Designed for civil engineering applications by Luís Luz")
+st.caption("Kh Vesic | 2025")
