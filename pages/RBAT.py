@@ -50,4 +50,4 @@ if st.button("Calcular área") or expr:
             st.success(f"Área = {resultado:.4f} {unidade}")
 
 st.markdown("---")
-st.caption("RBAT_2025.04.00 | Designed for civil engineering applications by Luís Luz")
+st.caption("RBAT_2025.04.00 | 2025")
