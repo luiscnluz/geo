@@ -8,6 +8,9 @@ st.set_page_config(page_title="Micropile Borehole Calculator")
 
 st.title("Minimum Micropile Borehole Calculation")
 
+st.header("Reference Charts")
+st.image("images/abacos.png", caption="Resistance", use_column_width=True)
+
 # User inputs
 E = 20000  # Fixed elastic modulus [kPa]
 nsk = st.number_input("Service load (Nsk) [kN]", value=1000.0)
