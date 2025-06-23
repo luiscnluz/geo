@@ -90,4 +90,4 @@ st.markdown("---")
 st.dataframe(df)
 
 st.markdown("---")
-st.caption("Microestacas | Designed for civil engineering applications by Luís Luz")
+st.caption("Microestacas | 2025")
