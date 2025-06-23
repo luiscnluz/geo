@@ -8,8 +8,6 @@ st.set_page_config(page_title="Micropile Borehole Calculator")
 
 st.title("Minimum Micropile Borehole Calculation")
 
-st.header("Reference Charts")
-st.image("images/abacos.png", caption="Resistance", use_column_width=True)
 
 # User inputs
 E = 20000  # Fixed elastic modulus [kPa]
@@ -30,6 +28,10 @@ st.subheader("Results")
 st.write(f"Cross-sectional area: {area:.6f} m²")
 st.write(f"Axial stiffness EA: {EA:.2f} kN")
 st.write(f"Minimum required length (Lmin): {Lmin:.2f} m")
+
+st.header("Reference Charts")
+st.image("images/abacos.png", caption="Resitance", use_container_width=True) 
+
 
 # PDF generation using reportlab
 def create_pdf():
