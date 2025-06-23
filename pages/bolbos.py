@@ -1,7 +1,8 @@
 import streamlit as st
 import math
-import pdfkit
-import os
+from io import BytesIO
+from reportlab.lib.pagesizes import A4
+from reportlab.pdfgen import canvas
 
 st.set_page_config(page_title="Micropile Borehole Calculator")
 
@@ -21,39 +22,51 @@ area = math.pi * diameter_m**2 / 4
 EA = E * area
 Lmin = nsk * FS / (math.pi * diameter_m * a * tskin)
 
-# Results
+# Results on screen
 st.subheader("Results")
 st.write(f"Cross-sectional area: {area:.6f} m²")
 st.write(f"Axial stiffness EA: {EA:.2f} kN")
 st.write(f"Minimum required length (Lmin): {Lmin:.2f} m")
 
-# Generate PDF content
-html = f"""
-<h2>Micropile Borehole Report</h2>
-<hr>
-<h3>Input Data</h3>
-<ul>
-  <li>Elastic modulus (E): {E} kPa</li>
-  <li>Service load (Nsk): {nsk} kN</li>
-  <li>Allowable shaft resistance (tskin): {tskin} kPa</li>
-  <li>Safety factor (FS): {FS}</li>
-  <li>Friction coefficient (a): {a}</li>
-  <li>Borehole diameter: {borehole_diameter} mm</li>
-</ul>
-<h3>Results</h3>
-<ul>
-  <li>Cross-sectional area: {area:.6f} m²</li>
-  <li>Axial stiffness (EA): {EA:.2f} kN</li>
-  <li>Minimum required pile length (Lmin): {Lmin:.2f} m</li>
-</ul>
-"""
+# PDF generation using reportlab
+def create_pdf():
+    buffer = BytesIO()
+    p = canvas.Canvas(buffer, pagesize=A4)
+    width, height = A4
 
-# Generate and download PDF
-if st.button("Generate PDF Report"):
-    with open("micropile_report.html", "w") as f:
-        f.write(html)
+    y = height - 50
+    p.setFont("Helvetica-Bold", 14)
+    p.drawString(50, y, "Micropile Borehole Report")
 
-    pdfkit.from_file("micropile_report.html", "micropile_report.pdf")
+    y -= 40
+    p.setFont("Helvetica", 12)
+    p.drawString(50, y, f"Elastic modulus (E): {E} kPa")
+    y -= 20
+    p.drawString(50, y, f"Service load (Nsk): {nsk} kN")
+    y -= 20
+    p.drawString(50, y, f"Allowable shaft resistance (tskin): {tskin} kPa")
+    y -= 20
+    p.drawString(50, y, f"Safety factor (FS): {FS}")
+    y -= 20
+    p.drawString(50, y, f"Friction coefficient (a): {a}")
+    y -= 20
+    p.drawString(50, y, f"Borehole diameter: {borehole_diameter} mm")
 
-    with open("micropile_report.pdf", "rb") as f:
-        st.download_button("📄 Download PDF", f, file_name="micropile_report.pdf")
+    y -= 40
+    p.setFont("Helvetica-Bold", 12)
+    p.drawString(50, y, "Results:")
+    y -= 20
+    p.setFont("Helvetica", 12)
+    p.drawString(50, y, f"Cross-sectional area: {area:.6f} m²")
+    y -= 20
+    p.drawString(50, y, f"Axial stiffness EA: {EA:.2f} kN")
+    y -= 20
+    p.drawString(50, y, f"Minimum required pile length (Lmin): {Lmin:.2f} m")
+
+    p.showPage()
+    p.save()
+    buffer.seek(0)
+    return buffer
+
+# Download button
+if st.but
