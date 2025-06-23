@@ -69,4 +69,6 @@ def create_pdf():
     return buffer
 
 # Download button
-if st.but
+if st.button("Generate PDF Report"):
+    pdf_bytes = create_pdf()
+    st.download_button("📄 Download PDF", data=pdf_bytes, file_name="micropile_report.pdf", mime="application/pdf")
