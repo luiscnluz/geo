@@ -1,10 +1,10 @@
 import streamlit as st
 import math
 
-st.title("Minimum Pile Length Calculation")
+st.title("Minimum Micropile Borehole calculation")
 
 # User inputs
-E = 2000
+E = 20000
 nsk = st.number_input("Service load (Nsk) [kN]", value=1000.0)
 tskin = st.number_input("Allowable shaft resistance (tskin) [kPa]", value=300.0)
 FS = st.number_input("FS", value=2.0)
@@ -19,6 +19,4 @@ Lmin = nsk * FS / (math.pi * diameter_m * a * tskin)
 
 # Results
 st.subheader("Results")
-st.write(f"Borehole cross-sectional area: {area:.6f} m²")
-st.write(f"Axial stiffness EA: {EA:.2f} kN")
-st.write(f"Minimum required pile length (Lmin): {Lmin:.2f} m")
+st.write(f"L min: {Lmin:.2f} m")
