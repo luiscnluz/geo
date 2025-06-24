@@ -4,9 +4,9 @@ from io import BytesIO
 from reportlab.lib.pagesizes import A4
 from reportlab.pdfgen import canvas
 
-st.set_page_config(page_title="Bolbo de Selagem")
+st.set_page_config(page_title="Bolbo de Selagem - Método de Bustamante e Doix")
 
-st.title("Cálculo de Bolbo de Selagem - Metodo de Bustamante e Doix")
+st.title("Cálculo de Bolbo de Selagem - Méodo de Bustamante e Doix")
 
 # Entradas do utilizador
 E = 20000  # Módulo de elasticidade fixo [kPa]
