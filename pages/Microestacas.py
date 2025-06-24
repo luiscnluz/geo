@@ -90,4 +90,4 @@ st.markdown("---")
 st.dataframe(df)
 
 st.markdown("---")
-st.caption("Microestacas | 2025")
+st.caption("Micropiles | 2025")
