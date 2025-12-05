@@ -159,6 +159,7 @@ def create_pdf(df, graph_path, section_name, df_bh, C_bolbo, carga_parede, V_tot
     pdf.cell(0, 10, "Anchorage Geometry", ln=True, align="C")
     pdf.image(graph_path, x=10, y=30, w=190)
 
+
     # ---------------------------------------------------------
     # BULB LOAD PAGE
     # ---------------------------------------------------------
@@ -538,9 +539,13 @@ ax.legend()
 df_res = pd.DataFrame(table)
 
 # save graph
-tmpfile = tempfile.NamedTemporaryFile(delete=False, suffix=".png")
-plt.savefig(tmpfile.name, dpi=300, bbox_inches="tight")
-graph_path = tmpfile.name
+import io
+
+img_buf = io.BytesIO()
+plt.savefig(img_buf, format="png", dpi=300, bbox_inches="tight")
+img_buf.seek(0)
+graph_path = img_buf
+
 
 # =============================================================
 # TAB 3 – RESULTS / EXPORT
@@ -852,3 +857,4 @@ with tab_calc:
 
     This section ensures total transparency of the structural/geotechnical verification process.
     """)
+
