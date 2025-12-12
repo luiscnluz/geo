@@ -1,6 +1,6 @@
 streamlit
 matplotlib
 pandas
-numpy
-reportlab
-fpdf2
+fpdf
+ezdxf
+jsonschema
