@@ -239,9 +239,10 @@ def create_pdf(df, graph_path, section_name, df_bh,
     return bytes(raw)
 
 # =============================================================
-# =============================================================
 # IMPORT CSV (ROBUSTO PARA STREAMLIT CLOUD)
 # =============================================================
+import io
+
 st.subheader("Import full data (anchors + excavation + stratigraphy + wall)")
 
 upload = st.file_uploader("Upload CSV file", type="csv")
@@ -282,7 +283,7 @@ if upload is not None:
             text = raw.decode("latin-1")
 
         # autodetecta separador
-        df_import = pd.read_csv(pd.compat.StringIO(text), sep=None, engine="python")
+        df_import = pd.read_csv(io.StringIO(text), sep=None, engine="python")
 
         # normalizar nomes de colunas
         df_import.columns = (
@@ -328,6 +329,7 @@ if upload is not None:
         st.error(f"CSV read error: {e}")
 
 st.markdown("---")
+
 
 # =============================================================
 # DXF EXPORT FUNCTION (FINAL + CLEAN)
@@ -1106,4 +1108,5 @@ You can export:
   ANCHOR_FREE, ANCHOR_BOND, ANCHOR_LABEL, WALL, EXCAVATION, STRATIGRAPHY, BOREHOLE
 """
     )
+
 
