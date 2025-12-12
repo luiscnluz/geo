@@ -239,7 +239,8 @@ def create_pdf(df, graph_path, section_name, df_bh,
     return bytes(raw)
 
 # =============================================================
-# IMPORT CSV
+# =============================================================
+# IMPORT CSV (ROBUSTO PARA STREAMLIT CLOUD)
 # =============================================================
 st.subheader("Import full data (anchors + excavation + stratigraphy + wall)")
 
@@ -256,45 +257,70 @@ esp_default = 0.30
 afast_default = 3.0
 A_inf_default = 1.5
 
+def safe_json_load(s):
+    if not isinstance(s, str):
+        return {}
+    s = s.strip()
+    if not s:
+        return {}
+    try:
+        return json.loads(s)
+    except:
+        try:
+            return json.loads(s.replace("'", '"'))
+        except:
+            return {}
+
 if upload is not None:
     try:
-        df_import = pd.read_csv(upload)
+        raw = upload.read()
+
+        # tenta UTF-8, se falhar usa Latin-1
+        try:
+            text = raw.decode("utf-8")
+        except:
+            text = raw.decode("latin-1")
+
+        # autodetecta separador
+        df_import = pd.read_csv(pd.compat.StringIO(text), sep=None, engine="python")
+
+        # normalizar nomes de colunas
+        df_import.columns = (
+            df_import.columns
+            .str.strip()
+            .str.lower()
+            .str.replace(" ", "_")
+        )
 
         cols_anchor = [
-            "x1",
-            "y1",
-            "angle",
-            "free",
-            "bond",
-            "prestress",
-            "strands",
-            "drill_mm",
-            "alpha",
-            "shear_stress",
-            "FS",
+            "x1","y1","angle","free","bond","prestress",
+            "strands","drill_mm","alpha","shear_stress","fs"
         ]
 
-        # Reimport anchors line by line
-        anchors_imported = [
-            {c: row[c] for c in cols_anchor if c in df_import.columns}
-            for _, row in df_import.iterrows()
-        ]
+        anchors_imported = []
 
-        # Read geometry saved inside geo_json
+        for _, row in df_import.iterrows():
+            anchor = {}
+            for c in cols_anchor:
+                if c in row and not pd.isna(row[c]):
+                    anchor[c] = float(row[c])
+            # só aceita anchors válidos
+            if all(k in anchor for k in ("x1","y1","angle","free","bond")):
+                anchors_imported.append(anchor)
+
+        # importa dados globais do geo_json
         if "geo_json" in df_import.columns:
-            raw = df_import["geo_json"].iloc[0]
-            if isinstance(raw, str) and raw.strip():
-                geo = json.loads(raw)
-
-                y_excav_default = geo.get("y_excav", 0)
-                L_excav_default = geo.get("L_excav", 5)
-                y_wall_default = geo.get("y_wall", 5)
-                strat_default = geo.get("stratigraphy", [])
-                borehole_id_default = geo.get("borehole_id", "S1")
-                borehole_x_default = geo.get("borehole_x", 1.0)
-                esp_default = geo.get("esp", 0.30)
-                afast_default = geo.get("afast", 3.0)
-                A_inf_default = geo.get("A_inf", 1.5)
+            g = safe_json_load(df_import["geo_json"].iloc[0])
+            if g:
+                y_excav_default = g.get("y_excav", y_excav_default)
+                L_excav_default = g.get("l_excav", L_excav_default)
+                y_wall_default = g.get("y_wall", y_wall_default)
+                strat_default = g.get("stratigraphy", strat_default)
+                borehole_id_default = g.get("borehole_id", borehole_id_default)
+                borehole_x_default = g.get("borehole_x", borehole_x_default)
+                esp_default = g.get("esp", esp_default)
+                afast_default = g.get("afast", afast_default)
+                A_inf_default = g.get("a_inf", A_inf_default)
 
         st.success("Data imported successfully.")
 
@@ -1080,3 +1106,4 @@ You can export:
   ANCHOR_FREE, ANCHOR_BOND, ANCHOR_LABEL, WALL, EXCAVATION, STRATIGRAPHY, BOREHOLE
 """
     )
+
