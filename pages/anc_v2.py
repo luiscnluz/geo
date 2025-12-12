@@ -522,7 +522,7 @@ with tab_anchors:
                 strands = st.number_input(
                     "Strands",
                     min_value=1,
-                    value=preset.get("strands", 3),
+                    value=int(preset.get("strands", 3) or 3)
                     key=f"str_{i}"
                 )
                 alpha = st.number_input(
@@ -1108,5 +1108,6 @@ You can export:
   ANCHOR_FREE, ANCHOR_BOND, ANCHOR_LABEL, WALL, EXCAVATION, STRATIGRAPHY, BOREHOLE
 """
     )
+
 
 
